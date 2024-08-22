@@ -12,6 +12,7 @@ dist
 dist-ssr
 weatherio-starter
 *.local
+.env
 
 # Editor directories and files
 .vscode/*
