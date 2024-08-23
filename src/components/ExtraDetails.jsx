@@ -9,9 +9,10 @@ const ExtraDetails = ({ text, value, img, measurement }) => {
         <div className="text-3xl flex items-end">
           <p>{value}</p>
           <div className="text-lg">
-            {measurement === "oC" ? (
+            {measurement === "oC" || measurement === "oF" ? (
               <p className="text-sm inline-block">
-                <sup className="-top-3">O</sup>C
+                <sup className="-top-3">O</sup>
+                {measurement.slice(1, 2)}
               </p>
             ) : (
               <p>{measurement}</p>

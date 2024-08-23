@@ -12,6 +12,15 @@ const ContextProvider = ({ children }) => {
   const [cities, setCities] = useState([]);
   const [currentTemp, setCurrentTemp] = useState([]);
   const [forecast, setForecast] = useState();
+  const [unit, setUnit] = useState("celcius");
+
+  const getTemp = (temp) => {
+    if (unit === "celcius") {
+      return temp;
+    } else {
+      return (temp * 9) / 5 + 32;
+    }
+  };
 
   return (
     <Context.Provider
@@ -28,6 +37,9 @@ const ContextProvider = ({ children }) => {
         setSelectedCity,
         forecast,
         setForecast,
+        unit,
+        setUnit,
+        getTemp,
       }}
     >
       {children}

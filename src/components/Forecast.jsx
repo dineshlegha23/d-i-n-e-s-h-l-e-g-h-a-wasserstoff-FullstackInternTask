@@ -19,13 +19,15 @@ const Forecast = () => {
     "Dec",
   ];
 
-  const { coordinates, forecast, setForecast } = useWeatherContext();
+  const { coordinates, forecast, setForecast, getTemp } = useWeatherContext();
   const { lat, lon } = coordinates;
   const hours = [];
 
   async function fetchData() {
     const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${process.env.API_KEY}`
+      `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${
+        import.meta.env.VITE_API_KEY
+      }`
     );
     const data = await response.json();
     setForecast(data);
@@ -47,11 +49,12 @@ const Forecast = () => {
   return (
     <div className="bg-gray rounded-2xl p-5">
       <div className="flex flex-col gap-5">
-        {hours.map((item) => {
+        {hours.map((item, index) => {
           const date = new Date(19800 + item.date * 1000);
           return (
             <SingleDayForecast
-              temp={item?.temp?.toFixed(0)}
+              key={index}
+              temp={getTemp(item?.temp?.toFixed(0))}
               date={`${date.getUTCDate()} ${monthNames[date.getUTCMonth()]}`}
               day={weekDayNames[date.getUTCDay()]}
               img={`/images/weather_icons/${item?.icon}.png`}

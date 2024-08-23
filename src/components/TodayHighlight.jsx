@@ -9,7 +9,7 @@ import { LiaTemperatureHighSolid } from "react-icons/lia";
 import { useWeatherContext } from "../context/context";
 
 const TodayHighlight = () => {
-  const { currentTemp } = useWeatherContext();
+  const { currentTemp, getTemp, unit } = useWeatherContext();
   const humidity = currentTemp?.main?.humidity;
   const pressure = currentTemp?.main?.pressure;
   const visibility = (currentTemp?.visibility / 1000).toFixed(2);
@@ -42,8 +42,8 @@ const TodayHighlight = () => {
         />
         <ExtraDetails
           text={"Feels Like"}
-          value={feels_like}
-          measurement={"oC"}
+          value={getTemp(feels_like)?.toFixed(2)}
+          measurement={unit === "celcius" ? "oC" : "oF"}
           img={<LiaTemperatureHighSolid size={40} />}
         />
       </div>

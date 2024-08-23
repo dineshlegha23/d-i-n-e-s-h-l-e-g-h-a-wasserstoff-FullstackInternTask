@@ -4,7 +4,7 @@ import { CiCloud } from "react-icons/ci";
 import { useWeatherContext } from "../context/context";
 
 const TodayAt = () => {
-  const { forecast } = useWeatherContext();
+  const { forecast, getTemp } = useWeatherContext();
   const timezone = forecast?.city?.timezone;
   const list = forecast?.list.slice(0, 8);
 
@@ -17,7 +17,7 @@ const TodayAt = () => {
             key={data.dt}
             date={data.dt}
             timezone={timezone}
-            temp={data.main.temp}
+            temp={getTemp(data.main.temp)}
             img={data.weather[0].icon}
             rotation={data.wind.deg}
             speed={data.wind.speed}

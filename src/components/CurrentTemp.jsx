@@ -4,8 +4,14 @@ import { FaLocationDot } from "react-icons/fa6";
 import { useWeatherContext } from "../context/context";
 
 const CurrentTemp = () => {
-  const { coordinates, currentTemp, setCurrentTemp, selectedCity } =
-    useWeatherContext();
+  const {
+    coordinates,
+    currentTemp,
+    setCurrentTemp,
+    selectedCity,
+    unit,
+    getTemp,
+  } = useWeatherContext();
 
   const [loading, setLoading] = useState(false);
 
@@ -14,7 +20,9 @@ const CurrentTemp = () => {
   async function fetchData() {
     setLoading(true);
     const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${process.env.API_KEY}`
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${
+        import.meta.env.VITE_API_KEY
+      }`
     );
     const data = await response.json();
     setCurrentTemp(data);
@@ -32,12 +40,13 @@ const CurrentTemp = () => {
   const date = currentDate[2];
 
   // rounding off temp
-  // temp = String(temp).includes(".") ? temp.toFixed(1) : temp;
-  temp = String(temp).includes(".")
-    ? String(temp).at(-1) === "0"
-      ? temp.slice(0, -2)
-      : temp
-    : temp;
+  temp = String(temp).includes(".") ? temp.toFixed(1) : temp;
+
+  // temp = String(temp).includes(".")
+  //   ? String(temp).at(-1) === "0"
+  //     ? temp.slice(0, -2)
+  //     : temp
+  //   : temp;
 
   // removing last 0 if there is any
   temp = String(temp).at(-1) === "0" ? temp.slice(0, -2) : temp;
@@ -61,8 +70,9 @@ const CurrentTemp = () => {
           <p>Now</p>
           <div className="flex justify-between items-center">
             <span className="text-6xl brightness-200">
-              {temp && temp}
-              <sup>o</sup>c
+              {temp && getTemp(temp)}
+              <sup>o</sup>
+              {unit === "celcius" ? "c" : "f"}
             </span>
             <i className="w-16 mx-5">
               <img src={`/images/weather_icons/${icon}.png`} alt="cloud logo" />

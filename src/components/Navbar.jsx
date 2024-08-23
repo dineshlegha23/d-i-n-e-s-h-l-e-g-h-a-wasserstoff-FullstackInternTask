@@ -3,16 +3,28 @@ import { IoSearchOutline } from "react-icons/io5";
 import { FaLocationCrosshairs } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
 import { useWeatherContext } from "../context/context";
+import celcius from "/celcius.png";
+import fahrenheit from "/fahrenheit.png";
 
 const Navbar = () => {
-  const { city, setCity, cities, setCities, setCoordinates, setSelectedCity } =
-    useWeatherContext();
+  const {
+    city,
+    setCity,
+    cities,
+    setCities,
+    setCoordinates,
+    setSelectedCity,
+    unit,
+    setUnit,
+  } = useWeatherContext();
   const [touched, setTouched] = useState(false);
   const [mobileSearch, setMobileSearch] = useState(false);
 
   const fetchData = async () => {
     const response = await fetch(
-      `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${process.env.API_KEY}`
+      `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${
+        import.meta.env.VITE_API_KEY
+      }`
     );
     const data = await response.json();
     setCities(data);
@@ -28,7 +40,6 @@ const Navbar = () => {
   }, [city]);
 
   return (
-    // Desktop View
     <nav className="flex justify-between items-center py-5 mx-auto max-w-7xl">
       <i className="w-48">
         <img src={"/images/logo.png"} alt="logo" />
@@ -48,7 +59,7 @@ const Navbar = () => {
           value={city}
           onChange={(e) => setCity(e.target.value)}
         />
-        //displaying all cities
+
         {touched && cities && (
           <ul className="absolute shadow-[0px_10px_20px_black] z-10 w-full flex flex-col bg-gray rounded-b-xl border-t-[1px] border-white/50">
             {cities.map((city, index) => (
@@ -76,7 +87,7 @@ const Navbar = () => {
           </ul>
         )}
       </div>
-      // For Mobile Devices
+
       <div className="hidden md:flex md:gap-5">
         <IoSearchOutline
           onClick={() => setMobileSearch(true)}
@@ -84,7 +95,21 @@ const Navbar = () => {
           className="bg-gray rounded-full p-3 w-12 h-12 cursor-pointer"
         />
         <div className="flex items-center relative gap-3 bg-[#B5A1D9] rounded-full py-[6px] px-3 cursor-pointer md:p-1">
-          <FaLocationCrosshairs className="md:p-2 w-10 h-10" />
+          {unit === "celcius" ? (
+            <img
+              src={celcius}
+              alt="celcius icon"
+              className="w-10 p-2"
+              onClick={() => setUnit("fahrenheit")}
+            />
+          ) : (
+            <img
+              src={fahrenheit}
+              alt="fahrenheit icon"
+              className="w-10 p-2"
+              onClick={() => setUnit("celcius")}
+            />
+          )}
         </div>
       </div>
       {mobileSearch && (
@@ -119,7 +144,6 @@ const Navbar = () => {
                     touched && cities.length > 0 ? "border-t-[1px]" : ""
                   } border-white/50`}
                 >
-                  // displaying all cities
                   {cities.map((city, index) => (
                     <li
                       onClick={(e) => {
@@ -149,8 +173,24 @@ const Navbar = () => {
         </div>
       )}
       <div className="flex items-center relative gap-3 bg-[#B5A1D9] hover:bg-gray transition-all rounded-full py-[6px] px-3 cursor-pointer md:hidden">
-        <FaLocationCrosshairs className="relative md:p-1 w-6 h-6" />
-        <button>Current Location</button>
+        {/* <FaLocationCrosshairs className="relative md:p-1 w-6 h-6" />
+        <button>Current Location</button> */}
+
+        {unit === "celcius" ? (
+          <img
+            src={celcius}
+            alt="celcius icon"
+            className="w-10 p-2"
+            onClick={() => setUnit("fahrenheit")}
+          />
+        ) : (
+          <img
+            src={fahrenheit}
+            alt="fahrenheit icon"
+            className="w-10 p-2"
+            onClick={() => setUnit("celcius")}
+          />
+        )}
       </div>
     </nav>
   );
